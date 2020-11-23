@@ -4,5 +4,9 @@
  * @returns {string}
  */
 function ucFirst(str) {
-  // ваш код...
+  if (str.length === 0) {
+    return str;
+  }
+  let capitalizeFirst = str[0].toUpperCase();
+  return `${capitalizeFirst}${str.slice(1)}`;
 }
