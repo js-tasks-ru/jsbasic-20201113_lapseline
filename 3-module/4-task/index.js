@@ -5,5 +5,11 @@
  * @returns {string}
  */
 function showSalary(users, age) {
-  // ваш код...
+  let result = "";
+  users.forEach((obj, idx, usersArray) => {
+    if (obj.age <= age) {
+      result = result + `${obj.name}, ${obj.balance}` + "\n";
+    }
+  });
+  return result.slice(0, result.length - 1);
 }
