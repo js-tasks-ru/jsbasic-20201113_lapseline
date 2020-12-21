@@ -41,7 +41,6 @@ export default class Carousel {
       );
     }
     const carouselLength = this.slides.length - 1;
-    console.log(carouselLength);
     let slideCurrentPosition = 0;
     wrapper.addEventListener("click", (evt) => {
       let step = inner.offsetWidth;
