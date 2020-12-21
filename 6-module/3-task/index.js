@@ -20,9 +20,10 @@ export default class Carousel {
       <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
     </div>`
     );
+    wrapper.querySelector(".carousel__arrow_left").style.display = "none";
     for (let product of this.slides) {
       inner.insertAdjacentHTML(
-        "afterbegin",
+        "beforeend",
         `
         <div class="carousel__slide" data-id="${product.id}">
           <img src="/assets/images/carousel/${
@@ -39,47 +40,39 @@ export default class Carousel {
       `
       );
     }
-    let eventButtons = inner.querySelectorAll(".carousel__button");
-    for (let button of eventButtons) {
-      button.addEventListener("click", (evt) => {
-        let productAdd = new CustomEvent("product-add", {
-          detail: "chicken-cashew",
+    const carouselLength = this.slides.length - 1;
+    console.log(carouselLength);
+    let slideCurrentPosition = 0;
+    wrapper.addEventListener("click", (evt) => {
+      let step = inner.offsetWidth;
+      if (evt.target.closest(".carousel__arrow_right")) {
+        slideCurrentPosition += -step;
+      }
+      if (evt.target.closest(".carousel__arrow_left")) {
+        slideCurrentPosition += step;
+      }
+      if (slideCurrentPosition === 0) {
+        wrapper.querySelector(".carousel__arrow_left").style.display = "none";
+      } else {
+        wrapper.querySelector(".carousel__arrow_left").style.display = "";
+      }
+      if (Math.abs(slideCurrentPosition) === step * carouselLength) {
+        wrapper.querySelector(".carousel__arrow_right").style.display = "none";
+      } else {
+        wrapper.querySelector(".carousel__arrow_right").style.display = "";
+      }
+      inner.style.transform = `translateX(${slideCurrentPosition}px)`;
+    });
+    wrapper.addEventListener("click", function (event) {
+      if (event.target.closest("button.carousel__button")) {
+        let productEvent = new CustomEvent("product-add", {
+          detail: event.target.closest("button.carousel__button").parentNode
+            .parentNode.dataset.id,
           bubbles: true,
         });
-        wrapper.dispatchEvent(productAdd);
-      });
-    }
-    function mover() {
-      let step = inner.offsetWidth;
-      let end = inner.childElementCount - 1;
-      if (event.currentTarget === leftArrow) {
-        move = move + step;
-      } else if (event.currentTarget === rightArrow) {
-        move = move + -step;
+        wrapper.dispatchEvent(productEvent);
       }
-      carouselMove.style.transform = `translateX(${move}px)`;
-      if (Math.abs(move) > 0) {
-        leftArrow.style.display = "";
-      } else {
-        leftArrow.style.display = "none";
-      }
-      if (Math.abs(move) < step * end) {
-        rightArrow.style.display = "";
-      } else {
-        rightArrow.style.display = "none";
-      }
-    }
-    const leftArrow = wrapper.querySelector(
-      ".carousel__arrow.carousel__arrow_left"
-    );
-    const rightArrow = wrapper.querySelector(
-      ".carousel__arrow.carousel__arrow_right"
-    );
-    leftArrow.style.display = "none";
-    let move = 0;
-    let carouselMove = wrapper.querySelector(".carousel__inner");
-    leftArrow.addEventListener("click", mover);
-    rightArrow.addEventListener("click", mover);
+    });
     return wrapper;
   }
 }

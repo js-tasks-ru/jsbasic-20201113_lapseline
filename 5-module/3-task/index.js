@@ -1,28 +1,35 @@
 function initCarousel() {
-  function mover() {
-    if (event.currentTarget === leftArrow) {
-      move = move + step;
-    } else if (event.currentTarget === rightArrow) {
-      move = move + -step;
+  const container = document.querySelector(".container");
+  const inner = document.querySelector(".carousel__inner");
+  const carouselLength = inner.childElementCount - 1;
+  let slideCurrentPosition = 0;
+  document.querySelector(
+    ".carousel__arrow.carousel__arrow_left"
+  ).style.display = "none";
+  container.addEventListener("click", (evt) => {
+    let step = inner.offsetWidth;
+    const rightArrow = document.querySelector(
+      ".carousel__arrow.carousel__arrow_right"
+    );
+    const leftArrow = document.querySelector(
+      ".carousel__arrow.carousel__arrow_left"
+    );
+    if (evt.target.closest(".carousel__arrow.carousel__arrow_right")) {
+      slideCurrentPosition += -step;
     }
-    carouselMove.style.transform = `translateX(${move}px)`;
-    if (Math.abs(move) > 0) {
-      leftArrow.style.display = "";
-    } else {
+    if (evt.target.closest(".carousel__arrow.carousel__arrow_left")) {
+      slideCurrentPosition += step;
+    }
+    if (slideCurrentPosition === 0) {
       leftArrow.style.display = "none";
-    }
-    if (Math.abs(move) < step * 3) {
-      rightArrow.style.display = "";
     } else {
-      rightArrow.style.display = "none";
+      leftArrow.style.display = "";
     }
-  }
-  const leftArrow = document.querySelector(".carousel__arrow_left");
-  const rightArrow = document.querySelector(".carousel__arrow_right");
-  let carouselMove = document.querySelector(".carousel__inner");
-  const step = document.querySelector(".carousel__slide").offsetWidth;
-  leftArrow.addEventListener("click", mover);
-  rightArrow.addEventListener("click", mover);
-  leftArrow.style.display = "none";
-  let move = 0;
+    if (Math.abs(slideCurrentPosition) === step * carouselLength) {
+      rightArrow.style.display = "none";
+    } else {
+      rightArrow.style.display = "";
+    }
+    inner.style.transform = `translateX(${slideCurrentPosition}px)`;
+  });
 }
