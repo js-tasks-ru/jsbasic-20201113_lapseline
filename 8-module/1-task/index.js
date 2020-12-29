@@ -62,31 +62,6 @@ export default class CartIcon {
     }
   }
 
-  updatePosition() {
-    if (!this.elem.offsetHeight) {
-      return;
-    } // not visible
-
-    if (!this.initialTopCoord) {
-      this.initialTopCoord =
-        this.elem.getBoundingClientRect().top + window.pageYOffset;
-    }
-
-    if (document.documentElement.clientWidth <= 767) {
-      // mobile: cart is always fixed
-      this.resetPosition();
-      return;
-    }
-
-    let isHeaderCartScrolled = window.pageYOffset > this.initialTopCoord;
-
-    if (isHeaderCartScrolled) {
-      this.fixPosition();
-    } else {
-      this.resetPosition();
-    }
-  }
-
   fixPosition() {
     Object.assign(this.elem.style, {
       position: "fixed",
