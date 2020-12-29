@@ -61,7 +61,7 @@ export default class CartIcon {
       this.resetPosition();
     }
   }
-
+  
   fixPosition() {
     Object.assign(this.elem.style, {
       position: "fixed",
@@ -89,4 +89,3 @@ export default class CartIcon {
     document.addEventListener("scroll", () => this.updatePosition());
     window.addEventListener("resize", () => this.updatePosition());
   }
-}
